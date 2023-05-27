@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>URL Shortener</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="left-column">
+      <h1>URL Shortener</h1>
+      <img src="url.jpg" alt="URL Shortener Image">
+    </div>
+    <div class="right-column">
+      <div class="maincontainer">
+        <form>
+          <label for="long-url">Enter or Paste Your long URL:</label>
+          <br>
+          <input type="text" id="long-url" name="long-url" autocomplete="off">
+          <span class="cancel-icon" id="cancel-icon">&#10005;</span>
+          <br>
+          <button type="button" id="shorten-btn" class="shorten-btn">Shorten</button>
+        </form>
+        <div class="short-url-container">
+          <p>Here's your shortened URL:</p>
+          <div class="short-url">
+            <a href="" target="_blank"></a>
+            <button type="button" id="copy-btn">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tech-stack">
+    <span><h2>Tech stack:</h2></span>
+    <img src="logo1.jpg" alt="HTML">
+    <img src="logo2.jpg" alt="CSS">
+    <img src="logo3.jpg" alt="JavaScript">
+  </div>
+
+  <script>
+    const shortenUrl = async () => {
+      const longUrl = document.getElementById('long-url').value;
+      const response = await fetch(`https://api.shrtco.de/v2/shorten?url=${longUrl}`);
+      const data = await response.json();
+      const shortUrl = data.result.full_short_link;
+  
+      const shortUrlContainer = document.querySelector('.short-url-container');
+      const shortUrlLink = shortUrlContainer.querySelector('a');
+      shortUrlLink.href = shortUrl;
+      shortUrlLink.textContent = shortUrl;
+      shortUrlContainer.style.display = 'block';
+  
+      const copyBtn = document.getElementById('copy-btn');
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(shortUrl).then(() => {
+          alert('Copied to clipboard!');
+        });
+      });
+    };
+  
+    const shortenBtn = document.getElementById('shorten-btn');
+    shortenBtn.addEventListener('click', shortenUrl);
+
+    const cancelIcon = document.getElementById('cancel-icon');
+    const longUrlInput = document.getElementById('long-url');
+
+    cancelIcon.addEventListener('click', () => {
+      longUrlInput.value = '';
+    });
+  </script>
+</body>
+</html>
